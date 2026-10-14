@@ -3,10 +3,6 @@ import { Link } from 'react-router-dom'
 import { limparDemonstracao, listarTodos } from '../data/armazenamento'
 import useTitulo from '../utils/useTitulo'
 
-// Página de apoio para quem apresenta: /demonstracao
-// Não aparece no menu do site. Serve para achar os atalhos rapidamente
-// e para apagar os cadastros de teste antes da apresentação.
-
 function SeloStatus({ status }) {
   return status === 'ativo' ? (
     <span className="rounded-full bg-dourado px-2.5 py-0.5 text-xs font-bold">Ativo</span>
@@ -48,11 +44,10 @@ export default function Demonstracao() {
   const [confirmando, setConfirmando] = useState(false)
   const [zerando, setZerando] = useState(false)
   const [aviso, setAviso] = useState('')
-  // Muda de valor para pedir que a lista seja carregada de novo
   const [versao, setVersao] = useState(0)
 
   useEffect(() => {
-    let ativo = true // evita atualizar a tela se a pessoa já saiu da página
+    let ativo = true
     listarTodos()
       .then((lista) => ativo && setAdvogados(lista))
       .catch(

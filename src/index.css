@@ -1,20 +1,14 @@
 @import 'tailwindcss';
 
-/*
-  Cores do SafeADV.
-  No Tailwind v4 as cores personalizadas são declaradas aqui, no bloco @theme.
-  Cada variável --color-NOME vira classes como bg-NOME, text-NOME, border-NOME.
-*/
 @theme {
-  --color-marinho: #142a46; /* cor principal */
-  --color-marinho-claro: #1f3d63; /* variação para hover e fundos secundários */
-  --color-dourado: #c5a15b; /* destaques, botões, selo de verificado */
-  --color-dourado-escuro: #a8853f; /* hover dos botões dourados */
+  --color-marinho: #142a46;
+  --color-marinho-claro: #1f3d63;
+  --color-dourado: #c5a15b;
+  --color-dourado-escuro: #a8853f;
   --color-branco: #ffffff;
 }
 
 :root {
-  /* O site tem só tema claro: evita que celulares em modo escuro deixem campos e menus escuros */
   color-scheme: light;
 }
 
@@ -22,10 +16,6 @@ body {
   @apply bg-branco text-marinho antialiased;
 }
 
-/*
-  Classes de botão reutilizáveis, para todos os botões do site ficarem iguais.
-  O @apply junta várias classes do Tailwind numa só.
-*/
 @layer components {
   .btn-primario {
     @apply inline-flex items-center justify-center gap-2 rounded-xl bg-dourado px-6 py-3 font-semibold text-marinho shadow-sm transition hover:bg-dourado-escuro focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dourado disabled:cursor-not-allowed disabled:opacity-60;
@@ -35,7 +25,6 @@ body {
     @apply inline-flex items-center justify-center gap-2 rounded-xl border-2 border-current px-6 py-3 font-semibold transition hover:bg-current/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dourado;
   }
 
-  /* Campos de formulário. text-base (16px) evita que o iPhone dê zoom ao tocar no campo. */
   .campo {
     @apply w-full rounded-xl border border-marinho/20 bg-branco px-4 py-3 text-base text-marinho outline-none transition placeholder:text-marinho/55 focus:border-dourado focus:ring-2 focus:ring-dourado/30 aria-invalid:border-red-600;
   }

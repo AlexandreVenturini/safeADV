@@ -5,7 +5,6 @@ import ResultadoConsulta from '../components/ResultadoConsulta'
 import { normalizarCodigo } from '../data/armazenamento'
 import useTitulo from '../utils/useTitulo'
 
-// Campo para digitar o código. Ao enviar, vai para /verificar/CODIGO.
 function FormularioCodigo() {
   const [texto, setTexto] = useState('')
   const navigate = useNavigate()
@@ -40,14 +39,12 @@ function FormularioCodigo() {
   )
 }
 
-// Atende duas rotas: /verificar (digitar o código) e /verificar/:codigo (vindo do QR Code).
 export default function Verificar() {
   const { codigo } = useParams()
 
   if (codigo) {
     return (
       <div className="mx-auto max-w-xl space-y-10">
-        {/* key={codigo}: ao consultar outro código, o resultado começa do zero */}
         <ResultadoConsulta key={codigo} codigo={normalizarCodigo(codigo)} />
         <div>
           <h2 className="mb-2 text-sm font-semibold text-marinho/70">Consultar outro código</h2>
@@ -60,7 +57,6 @@ export default function Verificar() {
   return <DigitarCodigo />
 }
 
-// Tela inicial da consulta, onde o cliente digita o código.
 function DigitarCodigo() {
   useTitulo('Verificar advogado')
 

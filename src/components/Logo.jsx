@@ -1,9 +1,6 @@
-// Logo do SafeADV: escudo (segurança) com balança (justiça), desenhado em SVG.
-// Prop "tema": "escuro" para usar sobre fundo azul-marinho, "claro" sobre fundo branco.
 export function LogoIcone({ className = 'h-10 w-10' }) {
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden="true">
-      {/* Escudo */}
       <path
         d="M32 4 56 12v18c0 15-10.5 25.5-24 30C18.5 55.5 8 45 8 30V12Z"
         fill="#142A46"
@@ -11,7 +8,6 @@ export function LogoIcone({ className = 'h-10 w-10' }) {
         strokeWidth="3"
         strokeLinejoin="round"
       />
-      {/* Balança */}
       <g stroke="#C5A15B" strokeWidth="2" strokeLinecap="round" fill="none">
         <path d="M32 19v26M25 45h14M18 23h28" />
         <path d="M20 23l-4 11M20 23l4 11M44 23l-4 11M44 23l4 11" />

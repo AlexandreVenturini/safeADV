@@ -3,9 +3,6 @@ import { buscarPorCodigo } from '../data/armazenamento'
 import useTitulo from '../utils/useTitulo'
 import Avatar from './Avatar'
 
-// Resultado da verificação de um código: Verificado, Bloqueado ou Não encontrado.
-// Cada resultado tem cor e ícone próprios para ser entendido em um segundo.
-
 function SeloVerificado({ className }) {
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
@@ -49,7 +46,6 @@ function DataConsulta({ quando }) {
   )
 }
 
-// Orientações para quando o resultado não é "verificado"
 function OQueFazer({ conferirDigitacao }) {
   return (
     <div className="mt-5 rounded-2xl bg-red-50 p-5">
@@ -176,7 +172,7 @@ export default function ResultadoConsulta({ codigo }) {
   const [quando] = useState(() => new Date())
 
   useEffect(() => {
-    let ativo = true // evita atualizar a tela se a pessoa já saiu da página
+    let ativo = true
     buscarPorCodigo(codigo)
       .then((advogado) => ativo && setEstado({ fase: 'pronto', advogado }))
       .catch(() => ativo && setEstado({ fase: 'erro' }))
@@ -185,7 +181,6 @@ export default function ResultadoConsulta({ codigo }) {
     }
   }, [codigo])
 
-  // Título da aba conforme o resultado
   const advogadoEncontrado = estado.advogado
   useTitulo(
     estado.fase === 'carregando'

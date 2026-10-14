@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react'
 import { DURACAO_CONSULTA_MS } from '../data/validacaoOab'
 import { LogoIcone } from './Logo'
 
-// Tela de espera exibida durante a consulta (simulada) à OAB.
-// As etapas vão sendo marcadas como concluídas ao longo da consulta.
 const ETAPAS = [
   'Conectando ao Cadastro Nacional dos Advogados',
   'Localizando a inscrição',
@@ -16,7 +14,7 @@ export default function ValidacaoOab({ oab, uf }) {
   useEffect(() => {
     const intervalo = DURACAO_CONSULTA_MS / ETAPAS.length
     const timers = ETAPAS.map((_, i) => setTimeout(() => setConcluidas(i + 1), intervalo * (i + 1) - 150))
-    return () => timers.forEach(clearTimeout) // limpa os timers se a tela for fechada antes
+    return () => timers.forEach(clearTimeout)
   }, [])
 
   return (

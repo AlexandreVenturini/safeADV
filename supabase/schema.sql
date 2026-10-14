@@ -1,7 +1,3 @@
--- SafeADV: estrutura do banco de dados.
--- Rode este arquivo uma vez no Supabase: SQL Editor > New query > colar > Run.
-
--- Tabela de advogados
 create table public.advogados (
   codigo     text primary key check (codigo ~ '^SADV-[A-Z0-9]{5}$'),
   nome       text not null,
@@ -9,23 +5,20 @@ create table public.advogados (
   uf         char(2) not null,
   email      text,
   telefone   text,
-  foto       text check (length(foto) < 300000),  -- imagem pequena em texto (data URL)
+  foto       text check (length(foto) < 300000),
   status     text not null default 'ativo' check (status in ('ativo', 'bloqueado')),
-  fixo       boolean not null default false,       -- true = advogado fictício da demonstração
+  fixo       boolean not null default false,
   criado_em  timestamptz not null default now(),
-  unique (oab, uf)                                  -- impede duas contas com a mesma OAB
+  unique (oab, uf)
 );
 
--- Row Level Security: sem uma regra (policy) liberando, ninguém acessa nada.
 alter table public.advogados enable row level security;
 
--- O que a chave pública do site (papel "anon") pode fazer em cada coluna.
 grant select on public.advogados to anon;
 grant insert (codigo, nome, oab, uf, email, telefone, foto) on public.advogados to anon;
 grant update (status) on public.advogados to anon;
 grant delete on public.advogados to anon;
 
--- Regras de acesso (policies)
 create policy "Qualquer pessoa pode consultar"
   on public.advogados for select to anon
   using (true);
@@ -42,7 +35,6 @@ create policy "Apagar apenas cadastros da demonstração"
   on public.advogados for delete to anon
   using (fixo = false);
 
--- Advogados fictícios fixos (os mesmos de src/data/advogados.js)
 insert into public.advogados (codigo, nome, oab, uf, email, telefone, status, fixo) values
   ('SADV-7K3P9', 'Dra. Mariana Lopes Ferreira', '123456', 'ES', 'mariana.ferreira@exemplo.adv.br', '(27) 90000-1234', 'ativo', true),
   ('SADV-R8M4T', 'Dr. Carlos Eduardo Nogueira', '654321', 'SP', 'carlos.nogueira@exemplo.adv.br', '(11) 90000-5678', 'ativo', true),

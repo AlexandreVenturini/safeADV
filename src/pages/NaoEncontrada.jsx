@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import useTitulo from '../utils/useTitulo'
 
-// Exibida quando o endereço digitado não corresponde a nenhuma rota.
 export default function NaoEncontrada() {
   useTitulo('Página não encontrada')
 

@@ -2,12 +2,9 @@ import { useEffect } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import Logo from './Logo'
 
-// Estrutura comum a todas as páginas: cabeçalho, conteúdo e rodapé.
-// O <Outlet /> é onde o React Router coloca a página da rota atual.
 export default function Layout() {
   const { pathname } = useLocation()
 
-  // Ao trocar de página, volta ao topo (o React Router não faz isso sozinho).
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
@@ -23,7 +20,6 @@ export default function Layout() {
             to="/verificar"
             className="rounded-lg border border-dourado px-3 py-2.5 text-sm font-semibold text-dourado transition hover:bg-dourado hover:text-marinho"
           >
-            {/* Em telas muito estreitas mostra só "Verificar" */}
             <span className="min-[360px]:hidden">Verificar</span>
             <span className="hidden min-[360px]:inline">Verificar advogado</span>
           </Link>

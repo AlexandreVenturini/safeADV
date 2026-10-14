@@ -1,20 +1,13 @@
 import { useEffect, useState } from 'react'
 
-// ⚠️ SIMULAÇÃO: nenhum e-mail é enviado de verdade.
-// Num sistema real, o identificador ficaria vinculado ao aparelho do advogado
-// e, ao detectar um aparelho novo, o servidor enviaria o código por e-mail.
-// Aqui o "e-mail" aparece na própria tela para a demonstração.
-
 const TENTATIVAS_MAX = 3
 
-// Aparelho fictício que "tentou" acessar
 const DISPOSITIVO = { aparelho: 'Celular Android · Chrome', local: 'Vitória, ES (aproximado)' }
 
 function gerarCodigo() {
   return String(Math.floor(100000 + Math.random() * 900000))
 }
 
-// mariana.ferreira@exemplo.adv.br -> m****@exemplo.adv.br
 function mascararEmail(email) {
   const [usuario, dominio] = email.split('@')
   return `${usuario[0]}****@${dominio}`
@@ -34,13 +27,11 @@ export default function NovoDispositivo({ advogado, onBloquear, onSair }) {
   const [emailChegou, setEmailChegou] = useState(false)
   const [digitado, setDigitado] = useState('')
   const [erros, setErros] = useState(0)
-  // 'verificando' | 'autorizado' | 'bloqueado'
   const [fase, setFase] = useState('verificando')
   const [motivoBloqueio, setMotivoBloqueio] = useState('')
   const [bloqueando, setBloqueando] = useState(false)
   const [falha, setFalha] = useState('')
 
-  // O "e-mail" chega ~1,2 s depois de cada envio
   useEffect(() => {
     const timer = setTimeout(() => setEmailChegou(true), 1200)
     return () => clearTimeout(timer)
@@ -154,7 +145,6 @@ export default function NovoDispositivo({ advogado, onBloquear, onSair }) {
           Enviamos um código de 6 dígitos para <strong className="break-all">{mascararEmail(advogado.email)}</strong>
         </p>
 
-        {/* "E-mail" simulado, exibido na tela para a demonstração */}
         <div className="rounded-2xl border-2 border-dashed border-dourado/60 p-4 text-sm" aria-live="polite">
           <p className="text-xs font-semibold tracking-wide text-dourado-escuro uppercase">
             📧 Simulação de e-mail recebido

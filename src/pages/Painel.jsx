@@ -7,8 +7,6 @@ import { alterarStatus, buscarPorCodigo } from '../data/armazenamento'
 import { baixarQrCode, linkVerificacao } from '../utils/qrcode'
 import useTitulo from '../utils/useTitulo'
 
-// Escudo do SafeADV no centro do QR Code. O nível de correção "H" permite
-// cobrir até ~30% do QR Code e ele continua legível.
 const LOGO_NO_QR = (tamanho) => ({ src: '/favicon.svg', width: tamanho, height: tamanho, excavate: true })
 
 function SeloStatus({ status }) {
@@ -25,7 +23,6 @@ function SeloStatus({ status }) {
 
 export default function Painel() {
   const { codigo } = useParams()
-  // undefined = carregando, null = não encontrado
   const [advogado, setAdvogado] = useState(undefined)
   useTitulo(advogado ? `Painel de ${advogado.nome}` : 'Painel do advogado')
   const [confirmandoBloqueio, setConfirmandoBloqueio] = useState(false)
@@ -34,11 +31,10 @@ export default function Painel() {
   const [erro, setErro] = useState('')
   const [falhaAoCarregar, setFalhaAoCarregar] = useState(false)
   const [simulandoDispositivo, setSimulandoDispositivo] = useState(false)
-  // Referência ao QR Code grande (invisível) usado para gerar a imagem de download
   const qrParaDownload = useRef(null)
 
   useEffect(() => {
-    let ativo = true // evita atualizar a tela se a pessoa já saiu da página
+    let ativo = true
     buscarPorCodigo(codigo)
       .then((encontrado) => ativo && setAdvogado(encontrado))
       .catch(() => ativo && setFalhaAoCarregar(true))
@@ -119,7 +115,6 @@ export default function Painel() {
 
   return (
     <div className="space-y-6">
-      {/* Cabeçalho com identificação e status */}
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <Avatar nome={advogado.nome} foto={advogado.foto} className="h-16 w-16 text-xl sm:h-20 sm:w-20 sm:text-2xl" />
@@ -143,7 +138,6 @@ export default function Painel() {
       )}
 
       <div className="grid gap-6 md:grid-cols-2">
-        {/* QR Code e código exclusivo */}
         <section className="rounded-3xl bg-marinho p-6 text-center text-branco shadow-lg">
           <h2 className="text-lg font-semibold">Seu QR Code de verificação</h2>
 
@@ -189,7 +183,6 @@ export default function Painel() {
             oficiais.
           </p>
 
-          {/* Versão grande e invisível do QR Code, usada só para gerar a imagem baixada */}
           <QRCodeCanvas
             ref={qrParaDownload}
             value={link}
@@ -202,7 +195,6 @@ export default function Painel() {
         </section>
 
         <div className="space-y-6">
-          {/* Contato oficial */}
           <section className="rounded-3xl border border-marinho/10 p-6 shadow-sm">
             <h2 className="text-lg font-semibold">Contato oficial</h2>
             <dl className="mt-4 space-y-3 text-sm">
@@ -223,7 +215,6 @@ export default function Painel() {
             </dl>
           </section>
 
-          {/* Status e bloqueio */}
           <section
             className={`rounded-3xl border p-6 shadow-sm ${bloqueado ? 'border-red-200 bg-red-50' : 'border-marinho/10'}`}
           >

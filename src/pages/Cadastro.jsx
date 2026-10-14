@@ -10,7 +10,6 @@ import useTitulo from '../utils/useTitulo'
 
 const VAZIO = { nome: '', oab: '', uf: '', email: '', telefone: '', foto: null }
 
-// Campo com rótulo e mensagem de erro, para não repetir esse trecho em todo campo.
 function Campo({ id, rotulo, erro, children, className = '' }) {
   return (
     <div className={className}>
@@ -27,7 +26,6 @@ function Campo({ id, rotulo, erro, children, className = '' }) {
   )
 }
 
-// Para o advogado que já tem cadastro voltar ao próprio painel pelo código.
 function AcessarPainel() {
   const [codigo, setCodigo] = useState('')
   const navigate = useNavigate()
@@ -62,7 +60,6 @@ function AcessarPainel() {
   )
 }
 
-// O cadastro passa por três fases: formulário → validando (consulta à OAB) → concluído.
 export default function Cadastro() {
   const [dados, setDados] = useState(VAZIO)
   const [erros, setErros] = useState({})
@@ -87,7 +84,7 @@ export default function Cadastro() {
   }
 
   async function enviar(evento) {
-    evento.preventDefault() // impede o navegador de recarregar a página
+    evento.preventDefault()
     const encontrados = validarCadastro(dados)
     setErros(encontrados)
     if (Object.keys(encontrados).length > 0) return
@@ -141,7 +138,6 @@ export default function Cadastro() {
     )
   }
 
-  // Liga o campo à sua mensagem de erro (acessibilidade para leitores de tela).
   const props = (campo) => ({
     id: campo,
     'aria-invalid': erros[campo] ? true : undefined,
@@ -162,7 +158,6 @@ export default function Cadastro() {
       )}
 
       <form onSubmit={enviar} noValidate className="mt-8 space-y-5">
-        {/* Foto */}
         <div className="flex items-center gap-4">
           {dados.foto ? (
             <Avatar nome={dados.nome || '?'} foto={dados.foto} className="h-20 w-20" />
@@ -175,7 +170,6 @@ export default function Cadastro() {
             <label htmlFor="foto" className="btn-secundario cursor-pointer px-4 py-2 text-sm">
               {dados.foto ? 'Trocar foto' : 'Escolher foto'}
             </label>
-            {/* accept="image/*" faz o celular oferecer a câmera ou a galeria */}
             <input {...props('foto')} type="file" accept="image/*" onChange={escolherFoto} className="sr-only" />
             {erros.foto && (
               <p id="foto-erro" className="mt-1 text-sm text-red-600">

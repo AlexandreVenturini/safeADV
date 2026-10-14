@@ -38,7 +38,6 @@ export default function Inicio() {
 
   return (
     <div className="space-y-14">
-      {/* Topo: mensagem principal e os dois caminhos */}
       <section className="rounded-3xl bg-marinho px-6 py-10 text-center text-branco shadow-lg sm:px-12 sm:py-14">
         <LogoIcone className="mx-auto h-20 w-20 sm:h-24 sm:w-24" />
         <h1 className="mt-6 text-3xl leading-tight font-bold sm:text-5xl">
@@ -58,7 +57,6 @@ export default function Inicio() {
         </div>
       </section>
 
-      {/* O problema */}
       <section className="mx-auto max-w-3xl text-center">
         <h2 className="text-2xl font-bold sm:text-3xl">O golpe do falso advogado</h2>
         <p className="mt-3 text-marinho/80">
@@ -67,7 +65,6 @@ export default function Inicio() {
         </p>
       </section>
 
-      {/* Como funciona */}
       <section>
         <h2 className="text-center text-2xl font-bold sm:text-3xl">Como funciona</h2>
         <ol className="mt-8 grid gap-4 md:grid-cols-3">
@@ -83,7 +80,6 @@ export default function Inicio() {
         </ol>
       </section>
 
-      {/* Segurança extra */}
       <section className="rounded-3xl bg-marinho/5 px-6 py-10 sm:px-10">
         <h2 className="text-center text-2xl font-bold sm:text-3xl">Camadas extras de segurança</h2>
         <ul className="mt-8 grid gap-6 md:grid-cols-3">
@@ -96,13 +92,11 @@ export default function Inicio() {
         </ul>
       </section>
 
-      {/* Aviso: complementar aos meios oficiais */}
       <p className="mx-auto max-w-3xl text-center text-sm text-marinho/70">
         O SafeADV não substitui os mecanismos oficiais de identificação profissional da OAB. É uma camada complementar
         de verificação para tornar o contato entre advogados e clientes mais seguro.
       </p>
 
-      {/* Atalhos para a demonstração */}
       <section className="mx-auto max-w-3xl rounded-2xl border border-dashed border-marinho/25 p-5">
         <h2 className="text-sm font-semibold tracking-wide text-marinho/70 uppercase">Códigos para teste</h2>
         <ul className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">

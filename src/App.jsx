@@ -7,8 +7,6 @@ import NaoEncontrada from './pages/NaoEncontrada'
 import Painel from './pages/Painel'
 import Verificar from './pages/Verificar'
 
-// Mapa de rotas: cada endereço aponta para uma página.
-// Todas ficam dentro do Layout, então compartilham cabeçalho e rodapé.
 export default function App() {
   return (
     <Routes>
@@ -18,7 +16,6 @@ export default function App() {
         <Route path="/painel/:codigo" element={<Painel />} />
         <Route path="/verificar" element={<Verificar />} />
         <Route path="/verificar/:codigo" element={<Verificar />} />
-        {/* Página de apoio para quem apresenta (fora do menu) */}
         <Route path="/demonstracao" element={<Demonstracao />} />
         <Route path="*" element={<NaoEncontrada />} />
       </Route>

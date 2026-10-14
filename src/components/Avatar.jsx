@@ -1,8 +1,6 @@
-// Foto do advogado ou, se não houver foto, as iniciais do nome.
-
 function iniciais(nome) {
   const partes = nome
-    .replace(/^Dra?\.\s*/i, '') // ignora "Dr." e "Dra."
+    .replace(/^Dra?\.\s*/i, '')
     .split(/\s+/)
     .filter(Boolean)
   if (partes.length === 0) return '?'

@@ -1,6 +1,3 @@
-// Funções de apoio ao formulário de cadastro.
-
-// Aplica a máscara de telefone enquanto a pessoa digita: (27) 99999-1234
 export function formatarTelefone(valor) {
   const d = valor.replace(/\D/g, '').slice(0, 11)
   if (d.length === 0) return ''
@@ -10,8 +7,6 @@ export function formatarTelefone(valor) {
   return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`
 }
 
-// Confere os campos e devolve um objeto { campo: 'mensagem de erro' }.
-// Objeto vazio = tudo certo.
 export function validarCadastro({ nome, oab, uf, email, telefone, foto }) {
   const erros = {}
   if (nome.trim().split(/\s+/).length < 2) erros.nome = 'Informe o nome completo.'
@@ -24,8 +19,6 @@ export function validarCadastro({ nome, oab, uf, email, telefone, foto }) {
   return erros
 }
 
-// Recorta a imagem no centro (quadrado) e reduz para 320x320 px em JPEG.
-// Uma foto de celular de ~4 MB vira ~30 KB, o que cabe tranquilamente no banco.
 export function reduzirImagem(arquivo, tamanho = 320) {
   return new Promise((resolve, reject) => {
     const endereco = URL.createObjectURL(arquivo)
