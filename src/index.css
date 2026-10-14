@@ -1,0 +1,18 @@
+@import 'tailwindcss';
+
+/*
+  Cores do SafeADV.
+  No Tailwind v4 as cores personalizadas são declaradas aqui, no bloco @theme.
+  Cada variável --color-NOME vira classes como bg-NOME, text-NOME, border-NOME.
+*/
+@theme {
+  --color-marinho: #142a46; /* cor principal */
+  --color-marinho-claro: #1f3d63; /* variação para hover e fundos secundários */
+  --color-dourado: #c5a15b; /* destaques, botões, selo de verificado */
+  --color-dourado-escuro: #a8853f; /* hover dos botões dourados */
+  --color-branco: #ffffff;
+}
+
+body {
+  @apply bg-branco text-marinho antialiased;
+}
