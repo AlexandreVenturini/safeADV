@@ -1,26 +1,22 @@
 import { ADVOGADOS_FIXOS } from './advogados'
+import { supabase } from './supabase'
 
-// Funções para salvar e buscar advogados.
-// Não existe servidor: os cadastros feitos na demonstração ficam no localStorage,
-// ou seja, só existem no navegador onde foram criados.
+// Funções para salvar e buscar advogados no banco de dados (Supabase).
+// Todas são assíncronas (async): a resposta vem pela internet, então
+// quem chama precisa esperar com "await".
 
-const CHAVE_CADASTROS = 'safeadv:advogados'
-// Guarda bloqueios/reativações feitos nos advogados fixos durante a demonstração.
-const CHAVE_STATUS_FIXOS = 'safeadv:status-fixos'
+const TABELA = 'advogados'
 
 // Sem 0/O e 1/I, para o código não ser confundido ao ser digitado.
 const CARACTERES = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
 
-function lerJSON(chave, padrao) {
-  try {
-    return JSON.parse(localStorage.getItem(chave)) ?? padrao
-  } catch {
-    return padrao
-  }
+// No banco a coluna se chama criado_em; no JavaScript usamos criadoEm.
+function doBanco({ criado_em, ...resto }) {
+  return { ...resto, criadoEm: criado_em }
 }
 
-function salvarJSON(chave, valor) {
-  localStorage.setItem(chave, JSON.stringify(valor))
+function exigirBanco() {
+  if (!supabase) throw new Error('Supabase não configurado (veja o arquivo .env.example)')
 }
 
 // Aceita "sadv-7k3p9", " SADV-7K3P9 " ou só "7K3P9" e devolve "SADV-7K3P9".
@@ -29,73 +25,81 @@ export function normalizarCodigo(texto) {
   return limpo.startsWith('SADV-') ? limpo : `SADV-${limpo}`
 }
 
-export function listarCadastrados() {
-  return lerJSON(CHAVE_CADASTROS, [])
-}
-
-// Lista completa: fixos (com o status atualizado) + cadastrados na demonstração.
-export function listarTodos() {
-  const statusFixos = lerJSON(CHAVE_STATUS_FIXOS, {})
-  const fixos = ADVOGADOS_FIXOS.map((adv) => ({
-    ...adv,
-    status: statusFixos[adv.codigo] ?? adv.status,
-  }))
-  return [...fixos, ...listarCadastrados()]
+export async function listarTodos() {
+  exigirBanco()
+  const { data, error } = await supabase.from(TABELA).select('*').order('criado_em')
+  if (error) throw error
+  return data.map(doBanco)
 }
 
 // Devolve o advogado ou null se o código não existir.
-export function buscarPorCodigo(codigo) {
+export async function buscarPorCodigo(codigo) {
   const procurado = normalizarCodigo(codigo)
-  return listarTodos().find((adv) => adv.codigo === procurado) ?? null
+  try {
+    exigirBanco()
+    const { data, error } = await supabase.from(TABELA).select('*').eq('codigo', procurado).maybeSingle()
+    if (error) throw error
+    return data ? doBanco(data) : null
+  } catch (erro) {
+    // Plano B: sem banco, consulta só os advogados fixos do código.
+    console.warn('Banco indisponível, usando os advogados fixos:', erro.message)
+    return ADVOGADOS_FIXOS.find((adv) => adv.codigo === procurado) ?? null
+  }
 }
 
-export function buscarPorOab(oab, uf) {
-  return listarTodos().find((adv) => adv.oab === oab && adv.uf === uf) ?? null
+export async function buscarPorOab(oab, uf) {
+  exigirBanco()
+  const { data, error } = await supabase.from(TABELA).select('*').eq('oab', oab).eq('uf', uf).maybeSingle()
+  if (error) throw error
+  return data ? doBanco(data) : null
 }
 
-// Gera um código no formato SADV-XXXXX que ainda não esteja em uso.
 export function gerarCodigo() {
-  let codigo
-  do {
-    let sufixo = ''
-    for (let i = 0; i < 5; i++) {
-      sufixo += CARACTERES[Math.floor(Math.random() * CARACTERES.length)]
-    }
-    codigo = `SADV-${sufixo}`
-  } while (buscarPorCodigo(codigo))
-  return codigo
+  let sufixo = ''
+  for (let i = 0; i < 5; i++) {
+    sufixo += CARACTERES[Math.floor(Math.random() * CARACTERES.length)]
+  }
+  return `SADV-${sufixo}`
 }
 
 // Salva um novo advogado e devolve o registro completo (com código e status).
-export function salvarAdvogado(dados) {
-  const advogado = {
-    ...dados,
-    codigo: gerarCodigo(),
-    status: 'ativo',
-    fixo: false,
-    criadoEm: new Date().toISOString(),
+// O código é sorteado; se por acaso já existir, sorteia de novo.
+export async function salvarAdvogado({ nome, oab, uf, email, telefone, foto }) {
+  exigirBanco()
+  for (let tentativa = 0; tentativa < 5; tentativa++) {
+    const novo = { codigo: gerarCodigo(), nome, oab, uf, email, telefone, foto }
+    const { data, error } = await supabase.from(TABELA).insert(novo).select().single()
+
+    if (!error) return doBanco(data)
+    // 23505 = valor repetido em um campo que deve ser único
+    if (error.code === '23505' && error.message.includes('oab_uf')) {
+      throw new Error(`Já existe um cadastro para a OAB ${oab}/${uf}.`)
+    }
+    if (error.code !== '23505') throw error
   }
-  salvarJSON(CHAVE_CADASTROS, [...listarCadastrados(), advogado])
-  return advogado
+  throw new Error('Não foi possível gerar um código único. Tente novamente.')
 }
 
 // Muda o status para "ativo" ou "bloqueado".
-export function alterarStatus(codigo, status) {
-  const procurado = normalizarCodigo(codigo)
-
-  if (ADVOGADOS_FIXOS.some((adv) => adv.codigo === procurado)) {
-    salvarJSON(CHAVE_STATUS_FIXOS, { ...lerJSON(CHAVE_STATUS_FIXOS, {}), [procurado]: status })
-  } else {
-    const atualizados = listarCadastrados().map((adv) =>
-      adv.codigo === procurado ? { ...adv, status } : adv,
-    )
-    salvarJSON(CHAVE_CADASTROS, atualizados)
-  }
-  return buscarPorCodigo(procurado)
+export async function alterarStatus(codigo, status) {
+  exigirBanco()
+  const { data, error } = await supabase
+    .from(TABELA)
+    .update({ status })
+    .eq('codigo', normalizarCodigo(codigo))
+    .select()
+    .single()
+  if (error) throw error
+  return doBanco(data)
 }
 
-// Apaga tudo o que foi criado na demonstração (útil antes de apresentar).
-export function limparDemonstracao() {
-  localStorage.removeItem(CHAVE_CADASTROS)
-  localStorage.removeItem(CHAVE_STATUS_FIXOS)
+// Apaga os cadastros feitos na demonstração e devolve os fixos ao status original.
+// Útil para "zerar" o sistema antes de apresentar.
+export async function limparDemonstracao() {
+  exigirBanco()
+  const { error } = await supabase.from(TABELA).delete().eq('fixo', false)
+  if (error) throw error
+  for (const adv of ADVOGADOS_FIXOS) {
+    await alterarStatus(adv.codigo, adv.status)
+  }
 }

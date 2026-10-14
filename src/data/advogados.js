@@ -1,7 +1,8 @@
-// Advogados FICTÍCIOS fixos no código.
-// Como fazem parte do próprio site, existem em qualquer dispositivo:
-// é por isso que o QR Code impresso no banner funciona em qualquer celular.
-// Nomes, OABs e contatos são inventados para a demonstração.
+// Advogados FICTÍCIOS fixos da demonstração.
+// Eles também estão no banco (supabase/schema.sql). Esta cópia no código é o
+// plano B: se o banco não responder, a consulta usa esta lista, e o QR Code
+// impresso no banner continua funcionando em qualquer celular.
+// Nomes, OABs e contatos são inventados.
 
 export const ADVOGADOS_FIXOS = [
   {
