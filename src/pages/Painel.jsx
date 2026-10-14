@@ -2,6 +2,7 @@ import { QRCodeCanvas } from 'qrcode.react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Avatar from '../components/Avatar'
+import NovoDispositivo from '../components/NovoDispositivo'
 import { alterarStatus, buscarPorCodigo } from '../data/armazenamento'
 import { baixarQrCode, linkVerificacao } from '../utils/qrcode'
 
@@ -30,6 +31,7 @@ export default function Painel() {
   const [copiado, setCopiado] = useState(false)
   const [erro, setErro] = useState('')
   const [falhaAoCarregar, setFalhaAoCarregar] = useState(false)
+  const [simulandoDispositivo, setSimulandoDispositivo] = useState(false)
   // Referência ao QR Code grande (invisível) usado para gerar a imagem de download
   const qrParaDownload = useRef(null)
 
@@ -97,6 +99,16 @@ export default function Painel() {
           Fazer cadastro
         </Link>
       </section>
+    )
+  }
+
+  if (simulandoDispositivo) {
+    return (
+      <NovoDispositivo
+        advogado={advogado}
+        onBloquear={async () => setAdvogado(await alterarStatus(advogado.codigo, 'bloqueado'))}
+        onSair={() => setSimulandoDispositivo(false)}
+      />
     )
   }
 
@@ -271,6 +283,23 @@ export default function Painel() {
                 >
                   Bloquear identificador
                 </button>
+
+                <div className="mt-5 border-t border-marinho/10 pt-5">
+                  <p className="text-sm text-marinho/80">
+                    Seu identificador fica vinculado a este aparelho. Veja o que acontece se alguém tentar usá-lo em
+                    outro:
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSimulandoDispositivo(true)
+                      window.scrollTo(0, 0)
+                    }}
+                    className="btn-secundario mt-3 w-full px-4"
+                  >
+                    Simular acesso de outro dispositivo
+                  </button>
+                </div>
               </>
             )}
           </section>
