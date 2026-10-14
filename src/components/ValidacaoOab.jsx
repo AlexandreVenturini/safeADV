@@ -31,7 +31,7 @@ export default function ValidacaoOab({ oab, uf }) {
         {ETAPAS.map((etapa, i) => {
           const feita = i < concluidas
           return (
-            <li key={etapa} className={`flex items-center gap-3 transition ${feita ? 'text-branco' : 'text-white/50'}`}>
+            <li key={etapa} className={`flex items-center gap-3 transition ${feita ? 'text-branco' : 'text-white/70'}`}>
               <span
                 className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-sm ${feita ? 'bg-dourado text-marinho' : 'border border-white/30'}`}
               >
@@ -43,7 +43,7 @@ export default function ValidacaoOab({ oab, uf }) {
         })}
       </ul>
 
-      <p className="mt-8 text-xs text-white/50">Consulta simulada para fins de demonstração.</p>
+      <p className="mt-8 text-xs text-white/70">Consulta simulada para fins de demonstração.</p>
     </section>
   )
 }

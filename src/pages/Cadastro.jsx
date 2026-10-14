@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Avatar from '../components/Avatar'
 import ValidacaoOab from '../components/ValidacaoOab'
-import { buscarPorOab, salvarAdvogado } from '../data/armazenamento'
+import { buscarPorOab, normalizarCodigo, salvarAdvogado } from '../data/armazenamento'
 import { UFS } from '../data/ufs'
 import { simularConsultaOab } from '../data/validacaoOab'
 import { formatarTelefone, reduzirImagem, validarCadastro } from '../utils/formulario'
+import useTitulo from '../utils/useTitulo'
 
 const VAZIO = { nome: '', oab: '', uf: '', email: '', telefone: '', foto: null }
 
@@ -26,6 +27,41 @@ function Campo({ id, rotulo, erro, children, className = '' }) {
   )
 }
 
+// Para o advogado que já tem cadastro voltar ao próprio painel pelo código.
+function AcessarPainel() {
+  const [codigo, setCodigo] = useState('')
+  const navigate = useNavigate()
+
+  function abrir(evento) {
+    evento.preventDefault()
+    if (codigo.trim()) navigate(`/painel/${normalizarCodigo(codigo)}`)
+  }
+
+  return (
+    <form onSubmit={abrir} className="mt-10 rounded-2xl border border-marinho/10 bg-marinho/5 p-5">
+      <label htmlFor="codigo-painel" className="block font-semibold">
+        Já tem cadastro? Acesse seu painel
+      </label>
+      <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+        <input
+          id="codigo-painel"
+          className="campo font-mono tracking-wider uppercase"
+          placeholder="SADV-XXXXX"
+          value={codigo}
+          onChange={(e) => setCodigo(e.target.value)}
+          autoCapitalize="characters"
+          autoComplete="off"
+          spellCheck={false}
+          maxLength={12}
+        />
+        <button type="submit" className="btn-secundario shrink-0">
+          Abrir painel
+        </button>
+      </div>
+    </form>
+  )
+}
+
 // O cadastro passa por três fases: formulário → validando (consulta à OAB) → concluído.
 export default function Cadastro() {
   const [dados, setDados] = useState(VAZIO)
@@ -33,6 +69,7 @@ export default function Cadastro() {
   const [erroGeral, setErroGeral] = useState('')
   const [fase, setFase] = useState('formulario')
   const [advogado, setAdvogado] = useState(null)
+  useTitulo('Cadastro do advogado')
 
   function alterar(campo, valor) {
     setDados((atual) => ({ ...atual, [campo]: valor }))
@@ -130,7 +167,7 @@ export default function Cadastro() {
           {dados.foto ? (
             <Avatar nome={dados.nome || '?'} foto={dados.foto} className="h-20 w-20" />
           ) : (
-            <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-marinho/25 text-xs text-marinho/50">
+            <span className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 border-dashed border-marinho/25 text-xs text-marinho/70">
               Foto
             </span>
           )}
@@ -207,10 +244,12 @@ export default function Cadastro() {
         <button type="submit" className="btn-primario w-full">
           Validar inscrição na OAB
         </button>
-        <p className="text-center text-xs text-marinho/60">
+        <p className="text-center text-xs text-marinho/70">
           Protótipo acadêmico: a validação na OAB é simulada.
         </p>
       </form>
+
+      <AcessarPainel />
     </section>
   )
 }

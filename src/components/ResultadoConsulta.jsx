@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { buscarPorCodigo } from '../data/armazenamento'
+import useTitulo from '../utils/useTitulo'
 import Avatar from './Avatar'
 
 // Resultado da verificação de um código: Verificado, Bloqueado ou Não encontrado.
@@ -42,7 +43,7 @@ function IconeAlerta({ tipo }) {
 
 function DataConsulta({ quando }) {
   return (
-    <p className="px-6 pb-5 text-center text-xs text-marinho/50">
+    <p className="px-6 pb-5 text-center text-xs text-marinho/70">
       Consulta realizada em {quando.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}
     </p>
   )
@@ -91,18 +92,18 @@ function Verificado({ advogado, quando }) {
         <p className="text-marinho/80">
           OAB {advogado.oab}/{advogado.uf}
         </p>
-        <p className="mt-1 font-mono text-sm text-marinho/60">{advogado.codigo}</p>
+        <p className="mt-1 font-mono text-sm text-marinho/70">{advogado.codigo}</p>
       </div>
 
       <div className="px-6 py-6">
-        <h3 className="text-sm font-semibold tracking-wide text-marinho/60 uppercase">Contato oficial</h3>
+        <h3 className="text-sm font-semibold tracking-wide text-marinho/70 uppercase">Contato oficial</h3>
         <dl className="mt-3 space-y-2 text-sm">
           <div className="flex justify-between gap-4">
-            <dt className="text-marinho/60">E-mail</dt>
+            <dt className="text-marinho/70">E-mail</dt>
             <dd className="text-right font-medium break-all">{advogado.email}</dd>
           </div>
           <div className="flex justify-between gap-4">
-            <dt className="text-marinho/60">Telefone</dt>
+            <dt className="text-marinho/70">Telefone</dt>
             <dd className="font-medium">{advogado.telefone}</dd>
           </div>
         </dl>
@@ -134,7 +135,7 @@ function Bloqueado({ advogado, quando }) {
       <div className="bg-red-600 px-6 py-6 text-center text-white">
         <IconeAlerta tipo="bloqueado" />
         <h1 className="mt-3 text-2xl font-bold">Identificador bloqueado</h1>
-        <p className="text-sm font-semibold text-white/90">Atenção: possível fraude</p>
+        <p className="text-sm font-semibold text-white">Atenção: possível fraude</p>
       </div>
       <div className="px-6 py-6">
         <p>
@@ -155,7 +156,7 @@ function NaoEncontrado({ codigo, quando }) {
       <div className="bg-red-600 px-6 py-6 text-center text-white">
         <IconeAlerta tipo="nao-encontrado" />
         <h1 className="mt-3 text-2xl font-bold">Código não encontrado</h1>
-        <p className="text-sm font-semibold text-white/90">Atenção: possível perfil falso</p>
+        <p className="text-sm font-semibold text-white">Atenção: possível perfil falso</p>
       </div>
       <div className="px-6 py-6">
         <p>
@@ -183,6 +184,20 @@ export default function ResultadoConsulta({ codigo }) {
       ativo = false
     }
   }, [codigo])
+
+  // Título da aba conforme o resultado
+  const advogadoEncontrado = estado.advogado
+  useTitulo(
+    estado.fase === 'carregando'
+      ? 'Verificando...'
+      : estado.fase === 'erro'
+        ? 'Consulta indisponível'
+        : !advogadoEncontrado
+          ? 'Código não encontrado'
+          : advogadoEncontrado.status === 'bloqueado'
+            ? 'Identificador bloqueado'
+            : 'Advogado verificado',
+  )
 
   if (estado.fase === 'carregando') {
     return (

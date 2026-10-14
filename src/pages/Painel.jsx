@@ -5,6 +5,7 @@ import Avatar from '../components/Avatar'
 import NovoDispositivo from '../components/NovoDispositivo'
 import { alterarStatus, buscarPorCodigo } from '../data/armazenamento'
 import { baixarQrCode, linkVerificacao } from '../utils/qrcode'
+import useTitulo from '../utils/useTitulo'
 
 // Escudo do SafeADV no centro do QR Code. O nível de correção "H" permite
 // cobrir até ~30% do QR Code e ele continua legível.
@@ -26,6 +27,7 @@ export default function Painel() {
   const { codigo } = useParams()
   // undefined = carregando, null = não encontrado
   const [advogado, setAdvogado] = useState(undefined)
+  useTitulo(advogado ? `Painel de ${advogado.nome}` : 'Painel do advogado')
   const [confirmandoBloqueio, setConfirmandoBloqueio] = useState(false)
   const [salvando, setSalvando] = useState(false)
   const [copiado, setCopiado] = useState(false)
@@ -85,7 +87,7 @@ export default function Painel() {
   }
 
   if (advogado === undefined) {
-    return <p className="py-20 text-center text-marinho/60">Carregando painel...</p>
+    return <p className="py-20 text-center text-marinho/70">Carregando painel...</p>
   }
 
   if (advogado === null) {
@@ -122,7 +124,7 @@ export default function Painel() {
         <div className="flex items-center gap-4">
           <Avatar nome={advogado.nome} foto={advogado.foto} className="h-16 w-16 text-xl sm:h-20 sm:w-20 sm:text-2xl" />
           <div>
-            <p className="text-sm text-marinho/60">Painel do advogado</p>
+            <p className="text-sm text-marinho/70">Painel do advogado</p>
             <h1 className="text-xl font-bold sm:text-2xl">{advogado.nome}</h1>
             <p className="text-marinho/70">
               OAB {advogado.oab}/{advogado.uf}
@@ -167,7 +169,7 @@ export default function Painel() {
             <button
               type="button"
               onClick={copiarCodigo}
-              className="rounded-lg border border-white/30 px-2 py-1 text-xs hover:bg-white/10"
+              className="min-h-10 rounded-lg border border-white/30 px-3 text-sm hover:bg-white/10"
             >
               {copiado ? 'Copiado!' : 'Copiar'}
             </button>
@@ -182,7 +184,7 @@ export default function Painel() {
             </Link>
           </div>
 
-          <p className="mt-5 text-xs text-white/60">
+          <p className="mt-5 text-xs text-white/75">
             Divulgue no cartão de visita, na assinatura de e-mail e nas redes sociais. Quem escanear verá seus dados
             oficiais.
           </p>
@@ -205,16 +207,16 @@ export default function Painel() {
             <h2 className="text-lg font-semibold">Contato oficial</h2>
             <dl className="mt-4 space-y-3 text-sm">
               <div>
-                <dt className="text-marinho/60">E-mail</dt>
+                <dt className="text-marinho/70">E-mail</dt>
                 <dd className="font-medium break-all">{advogado.email}</dd>
               </div>
               <div>
-                <dt className="text-marinho/60">Telefone</dt>
+                <dt className="text-marinho/70">Telefone</dt>
                 <dd className="font-medium">{advogado.telefone}</dd>
               </div>
               {advogado.criadoEm && (
                 <div>
-                  <dt className="text-marinho/60">Cadastrado em</dt>
+                  <dt className="text-marinho/70">Cadastrado em</dt>
                   <dd className="font-medium">{new Date(advogado.criadoEm).toLocaleDateString('pt-BR')}</dd>
                 </div>
               )}
@@ -241,7 +243,7 @@ export default function Painel() {
                 >
                   {salvando ? 'Reativando...' : 'Reativar identificador'}
                 </button>
-                <p className="mt-2 text-xs text-marinho/60">
+                <p className="mt-2 text-xs text-marinho/70">
                   Num sistema real, a reativação exigiria uma nova validação de identidade.
                 </p>
               </>

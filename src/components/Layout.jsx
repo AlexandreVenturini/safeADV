@@ -1,21 +1,31 @@
-import { Link, Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import Logo from './Logo'
 
 // Estrutura comum a todas as páginas: cabeçalho, conteúdo e rodapé.
 // O <Outlet /> é onde o React Router coloca a página da rota atual.
 export default function Layout() {
+  const { pathname } = useLocation()
+
+  // Ao trocar de página, volta ao topo (o React Router não faz isso sozinho).
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   return (
     <div className="flex min-h-svh flex-col">
       <header className="bg-marinho shadow-md">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
-          <Link to="/" aria-label="SafeADV - página inicial">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
+          <Link to="/" aria-label="SafeADV - página inicial" className="shrink-0">
             <Logo />
           </Link>
           <Link
             to="/verificar"
-            className="rounded-lg border border-dourado px-3 py-2 text-sm font-semibold text-dourado transition hover:bg-dourado hover:text-marinho"
+            className="rounded-lg border border-dourado px-3 py-2.5 text-sm font-semibold text-dourado transition hover:bg-dourado hover:text-marinho"
           >
-            Verificar advogado
+            {/* Em telas muito estreitas mostra só "Verificar" */}
+            <span className="min-[360px]:hidden">Verificar</span>
+            <span className="hidden min-[360px]:inline">Verificar advogado</span>
           </Link>
         </div>
       </header>

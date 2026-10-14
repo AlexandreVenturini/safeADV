@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { LogoIcone } from '../components/Logo'
 import { ADVOGADOS_FIXOS } from '../data/advogados'
+import useTitulo from '../utils/useTitulo'
 
 const PASSOS = [
   {
@@ -33,6 +34,8 @@ const SEGURANCA = [
 ]
 
 export default function Inicio() {
+  useTitulo()
+
   return (
     <div className="space-y-14">
       {/* Topo: mensagem principal e os dois caminhos */}
@@ -107,20 +110,20 @@ export default function Inicio() {
             <li key={adv.codigo}>
               <Link
                 to={`/verificar/${adv.codigo}`}
-                className="flex items-center gap-2 rounded-lg bg-marinho/5 px-3 py-2 text-sm hover:bg-marinho/10"
+                className="flex items-center gap-2 rounded-lg bg-marinho/5 px-3 py-2.5 text-sm hover:bg-marinho/10"
               >
                 <span className="font-mono font-semibold">{adv.codigo}</span>
-                <span className="text-marinho/60">· {adv.status === 'ativo' ? 'ativo' : 'bloqueado'}</span>
+                <span className="text-marinho/70">· {adv.status === 'ativo' ? 'ativo' : 'bloqueado'}</span>
               </Link>
             </li>
           ))}
           <li>
             <Link
               to="/verificar/SADV-FALSO"
-              className="flex items-center gap-2 rounded-lg bg-marinho/5 px-3 py-2 text-sm hover:bg-marinho/10"
+              className="flex items-center gap-2 rounded-lg bg-marinho/5 px-3 py-2.5 text-sm hover:bg-marinho/10"
             >
               <span className="font-mono font-semibold">SADV-FALSO</span>
-              <span className="text-marinho/60">· não existe</span>
+              <span className="text-marinho/70">· não existe</span>
             </Link>
           </li>
         </ul>

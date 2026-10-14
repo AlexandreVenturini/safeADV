@@ -13,6 +13,11 @@
   --color-branco: #ffffff;
 }
 
+:root {
+  /* O site tem só tema claro: evita que celulares em modo escuro deixem campos e menus escuros */
+  color-scheme: light;
+}
+
 body {
   @apply bg-branco text-marinho antialiased;
 }
@@ -32,6 +37,6 @@ body {
 
   /* Campos de formulário. text-base (16px) evita que o iPhone dê zoom ao tocar no campo. */
   .campo {
-    @apply w-full rounded-xl border border-marinho/20 bg-branco px-4 py-3 text-base text-marinho outline-none transition placeholder:text-marinho/40 focus:border-dourado focus:ring-2 focus:ring-dourado/30 aria-invalid:border-red-600;
+    @apply w-full rounded-xl border border-marinho/20 bg-branco px-4 py-3 text-base text-marinho outline-none transition placeholder:text-marinho/55 focus:border-dourado focus:ring-2 focus:ring-dourado/30 aria-invalid:border-red-600;
   }
 }

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { LogoIcone } from '../components/Logo'
 import ResultadoConsulta from '../components/ResultadoConsulta'
 import { normalizarCodigo } from '../data/armazenamento'
+import useTitulo from '../utils/useTitulo'
 
 // Campo para digitar o código. Ao enviar, vai para /verificar/CODIGO.
 function FormularioCodigo() {
@@ -55,6 +56,13 @@ export default function Verificar() {
       </div>
     )
   }
+
+  return <DigitarCodigo />
+}
+
+// Tela inicial da consulta, onde o cliente digita o código.
+function DigitarCodigo() {
+  useTitulo('Verificar advogado')
 
   return (
     <section className="mx-auto max-w-xl">

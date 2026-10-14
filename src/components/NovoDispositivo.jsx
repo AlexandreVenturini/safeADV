@@ -135,15 +135,15 @@ export default function NovoDispositivo({ advogado, onBloquear, onSair }) {
         </p>
         <dl className="mt-5 space-y-1 rounded-2xl bg-white/10 p-4 text-left text-sm">
           <div className="flex justify-between gap-3">
-            <dt className="text-white/60">Aparelho</dt>
+            <dt className="text-white/75">Aparelho</dt>
             <dd className="text-right">{DISPOSITIVO.aparelho}</dd>
           </div>
           <div className="flex justify-between gap-3">
-            <dt className="text-white/60">Local</dt>
+            <dt className="text-white/75">Local</dt>
             <dd className="text-right">{DISPOSITIVO.local}</dd>
           </div>
           <div className="flex justify-between gap-3">
-            <dt className="text-white/60">Quando</dt>
+            <dt className="text-white/75">Quando</dt>
             <dd>Agora</dd>
           </div>
         </dl>
@@ -161,7 +161,7 @@ export default function NovoDispositivo({ advogado, onBloquear, onSair }) {
           </p>
           {emailChegou ? (
             <div className="mt-2">
-              <p className="text-marinho/60">De: SafeADV &lt;nao-responda@safeadv&gt;</p>
+              <p className="text-marinho/70">De: SafeADV &lt;nao-responda@safeadv&gt;</p>
               <p className="mt-2">
                 Seu código de verificação é{' '}
                 <span className="font-mono text-lg font-bold tracking-widest">{codigoEnviado}</span>. Se não foi você,
@@ -169,7 +169,7 @@ export default function NovoDispositivo({ advogado, onBloquear, onSair }) {
               </p>
             </div>
           ) : (
-            <p className="mt-2 animate-pulse text-marinho/60">Enviando código...</p>
+            <p className="mt-2 animate-pulse text-marinho/70">Enviando código...</p>
           )}
         </div>
 
@@ -216,7 +216,7 @@ export default function NovoDispositivo({ advogado, onBloquear, onSair }) {
           >
             Não fui eu, bloquear identificador
           </button>
-          <button type="button" onClick={onSair} disabled={bloqueando} className="py-2 text-marinho/60 underline">
+          <button type="button" onClick={onSair} disabled={bloqueando} className="py-2 text-marinho/70 underline">
             Cancelar
           </button>
         </div>
