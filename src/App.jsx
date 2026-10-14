@@ -1,19 +1,24 @@
-// Tela provisória só para conferir se o Tailwind e as cores estão funcionando.
-// Na etapa 2 ela será substituída pelas rotas e pelo layout do SafeADV.
-function App() {
+import { Route, Routes } from 'react-router-dom'
+import Layout from './components/Layout'
+import Cadastro from './pages/Cadastro'
+import Inicio from './pages/Inicio'
+import NaoEncontrada from './pages/NaoEncontrada'
+import Painel from './pages/Painel'
+import Verificar from './pages/Verificar'
+
+// Mapa de rotas: cada endereço aponta para uma página.
+// Todas ficam dentro do Layout, então compartilham cabeçalho e rodapé.
+export default function App() {
   return (
-    <main className="min-h-svh bg-marinho text-branco flex flex-col items-center justify-center gap-6 p-6 text-center">
-      <h1 className="text-4xl font-bold">
-        Safe<span className="text-dourado">ADV</span>
-      </h1>
-      <p className="max-w-md text-white/80">
-        Verificação de identidade de advogados. Configuração inicial concluída.
-      </p>
-      <button className="rounded-lg bg-dourado px-6 py-3 font-semibold text-marinho hover:bg-dourado-escuro">
-        Botão de teste
-      </button>
-    </main>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Inicio />} />
+        <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/painel/:codigo" element={<Painel />} />
+        <Route path="/verificar" element={<Verificar />} />
+        <Route path="/verificar/:codigo" element={<Verificar />} />
+        <Route path="*" element={<NaoEncontrada />} />
+      </Route>
+    </Routes>
   )
 }
-
-export default App
