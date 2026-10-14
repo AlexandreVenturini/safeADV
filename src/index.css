@@ -16,3 +16,17 @@
 body {
   @apply bg-branco text-marinho antialiased;
 }
+
+/*
+  Classes de botão reutilizáveis, para todos os botões do site ficarem iguais.
+  O @apply junta várias classes do Tailwind numa só.
+*/
+@layer components {
+  .btn-primario {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-dourado px-6 py-3 font-semibold text-marinho shadow-sm transition hover:bg-dourado-escuro focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dourado disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-secundario {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border-2 border-current px-6 py-3 font-semibold transition hover:bg-current/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-dourado;
+  }
+}
