@@ -43,7 +43,11 @@ export async function buscarPorCodigo(codigo) {
   } catch (erro) {
     // Plano B: sem banco, consulta só os advogados fixos do código.
     console.warn('Banco indisponível, usando os advogados fixos:', erro.message)
-    return ADVOGADOS_FIXOS.find((adv) => adv.codigo === procurado) ?? null
+    const fixo = ADVOGADOS_FIXOS.find((adv) => adv.codigo === procurado)
+    if (fixo) return fixo
+    // Sem o banco não dá para afirmar que o código não existe:
+    // melhor avisar do erro do que acusar um advogado real de ser falso.
+    throw new Error('Sem conexão com o banco de dados.', { cause: erro })
   }
 }
 

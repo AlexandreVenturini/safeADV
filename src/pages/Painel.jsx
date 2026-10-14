@@ -29,12 +29,15 @@ export default function Painel() {
   const [salvando, setSalvando] = useState(false)
   const [copiado, setCopiado] = useState(false)
   const [erro, setErro] = useState('')
+  const [falhaAoCarregar, setFalhaAoCarregar] = useState(false)
   // Referência ao QR Code grande (invisível) usado para gerar a imagem de download
   const qrParaDownload = useRef(null)
 
   useEffect(() => {
     let ativo = true // evita atualizar a tela se a pessoa já saiu da página
-    buscarPorCodigo(codigo).then((encontrado) => ativo && setAdvogado(encontrado))
+    buscarPorCodigo(codigo)
+      .then((encontrado) => ativo && setAdvogado(encontrado))
+      .catch(() => ativo && setFalhaAoCarregar(true))
     return () => {
       ativo = false
     }
@@ -69,6 +72,14 @@ export default function Painel() {
     } catch {
       setErro('Não foi possível gerar a imagem do QR Code neste navegador.')
     }
+  }
+
+  if (falhaAoCarregar) {
+    return (
+      <p role="alert" className="py-20 text-center text-marinho/70">
+        Não foi possível carregar o painel agora. Verifique a conexão e recarregue a página.
+      </p>
+    )
   }
 
   if (advogado === undefined) {
